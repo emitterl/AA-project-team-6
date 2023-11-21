@@ -7,12 +7,14 @@ csv_file_path = 'charging_sessions.csv'
 
 df = pd.read_csv(csv_file_path, delimiter=',', quotechar='"')
 
+
+# Hilfsfunktion zum Erstellen der userInput Tabelle
 def parse_user_inputs(row):
     
     user_inputs = row['userInputs']
     id = row['id']
 
-    if user_inputs and isinstance(user_inputs, str):
+    if isinstance(user_inputs, str):
         try:
             # Konvertieren des Strings in ein Python-Dictionary
             user_inputs_data = ast.literal_eval(user_inputs)
@@ -41,11 +43,11 @@ df['stationID'] = df['stationID'].astype(str)
 df['timezone'] = df['timezone'].astype(str)
 df['userID'] = df['userID'].astype(str)
     
-# Duplikate basierend auf 'id' identifizieren und entfernen
-duplikate_id = df[df.duplicated(subset='id')]
-# print("Doppelte Einträge basierend auf 'id':")
-# print(duplikate_id)
-df = df.drop_duplicates(subset='id')
+
+# Löscht Spalte Unnamed und anschließend alle Duplikate    
+df.drop(df.columns[df.columns.str.contains('unnamed',case = False)],axis = 1, inplace = True)
+df = df.drop_duplicates()
+
 
 # Erstelle DataFrame user_inputs_df
 user_inputs_list = df.apply(parse_user_inputs, axis=1)
@@ -68,8 +70,6 @@ user_inputs_df['requestedDeparture'] = pd.to_datetime(user_inputs_df['requestedD
 
 # Duplikate in user_inputs_df löschen
 duplikate_id_user = user_inputs_df[user_inputs_df.duplicated()]
-print("Doppelte Einträge in user_inputs_df: ")
-print(duplikate_id_user)
 user_inputs_df = user_inputs_df.drop_duplicates()
 
 # Ersten Zeilen der importierten Daten anzeigen von charging_sessions und user_inputs
