@@ -73,6 +73,9 @@ user_inputs_df['requestedDeparture'] = pd.to_datetime(user_inputs_df['requestedD
 duplikate_id_user = user_inputs_df[user_inputs_df.duplicated()]
 user_inputs_df = user_inputs_df.drop_duplicates()
 
+# Handle missing values (in progress)
+dfNan = df[df.isna().any(axis=1)]
+
 # Erste Zeilen der importierten Daten anzeigen von charging_sessions und user_inputs
 print(df.head())
 print(user_inputs_df.head())
