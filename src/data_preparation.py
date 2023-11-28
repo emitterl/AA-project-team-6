@@ -46,6 +46,7 @@ df['userID'] = df['userID'].astype(str)
 
 # Löscht Spalte Unnamed und anschließend alle Duplikate    
 df.drop(df.columns[df.columns.str.contains('unnamed',case = False)],axis = 1, inplace = True)
+df.drop(df.columns[df.columns.str.contains('timezone',case = False)],axis = 1, inplace = True)
 df = df.drop_duplicates()
 
 
@@ -72,6 +73,9 @@ user_inputs_df['requestedDeparture'] = pd.to_datetime(user_inputs_df['requestedD
 duplikate_id_user = user_inputs_df[user_inputs_df.duplicated()]
 user_inputs_df = user_inputs_df.drop_duplicates()
 
-# Ersten Zeilen der importierten Daten anzeigen von charging_sessions und user_inputs
+# Handle missing values (in progress)
+dfNan = df[df.isna().any(axis=1)]
+
+# Erste Zeilen der importierten Daten anzeigen von charging_sessions und user_inputs
 print(df.head())
 print(user_inputs_df.head())
