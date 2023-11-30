@@ -53,8 +53,10 @@ df['disconnectTime'] = df['disconnectTime'].apply(convert_timezone)
 df['doneChargingTime'] = df['doneChargingTime'].apply(convert_timezone)
     
 
-# Löscht Spalte Unnamed und anschließend alle Duplikate    
+# Löscht Spalte Unnamed, stationID, sessionID und anschließend alle Duplikate    
 df.drop(df.columns[df.columns.str.contains('unnamed',case = False)],axis = 1, inplace = True)
+df.drop(['sessionID', 'stationID'], axis=1, inplace=True)
+
 df = df.drop_duplicates()
 
 
