@@ -21,3 +21,23 @@ print(f"Alle spaceIDs site 2: {df_site2['spaceID'].unique()}")
 
 print(f"Anzahl Aufladungen Insgesamt site 1: {len(df_site1)}")
 print(f"Anzahl Aufladungen Insgesamt site 2: {len(df_site2)}")
+
+print(f"Anzahl stationIds site 1: {df_site1['stationID'].nunique()}")
+print(f"Alle stationIDs site 1: {df_site1['stationID'].unique()}")
+
+print(f"Anzahl stationIds site 2: {df_site2['stationID'].nunique()}")
+print(f"Alle stationIDs site 2: {df_site2['stationID'].unique()}")
+
+# Python-Code zur Überprüfung, ob jede stationID immer den gleichen Wert als spaceID hat
+
+def check_station_space_equivalence(df):
+    # Gruppieren nach 'stationID' und überprüfen, ob jede Gruppe genau eine einzigartige 'spaceID' hat
+    station_space_groups = df.groupby('stationID')['spaceID'].nunique()
+    is_equivalent = all(station_space_groups == 1)
+    return is_equivalent
+
+print(f"Jede stationID hat genau eine spaceID: {check_station_space_equivalence(df)}")
+station_space_pairs = df.groupby('stationID')['spaceID'].unique()
+print("Alle Paare von stationID und spaceID:")
+for station, spaces in station_space_pairs.items():
+    print(f"StationID {station} hat folgende SpaceIDs: {list(spaces)}")
