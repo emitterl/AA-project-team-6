@@ -68,16 +68,16 @@ user_inputs_df = pd.DataFrame([item for sublist in user_inputs_list for item in 
 # löscht userInputs, da in eigener Tabelle
 df = df.drop('userInputs', axis=1)
 
+# löscht paymentRequired, da immer true
+user_inputs_df = user_inputs_df.drop('paymentRequired', axis=1)
 
 # Konvertieren der Datentypen in user_inputs_df
 user_inputs_df['WhPerMile'] = user_inputs_df['WhPerMile'].astype(float)
 user_inputs_df['kWhRequested'] = user_inputs_df['kWhRequested'].astype(float)
 user_inputs_df['milesRequested'] = user_inputs_df['milesRequested'].astype(float)
 user_inputs_df['minutesAvailable'] = user_inputs_df['minutesAvailable'].astype(float)
-user_inputs_df['paymentRequired'] = user_inputs_df['paymentRequired'].astype(bool)
 user_inputs_df['modifiedAt'] = pd.to_datetime(user_inputs_df['modifiedAt'], utc=True).apply(convert_timezone)
 user_inputs_df['requestedDeparture'] = pd.to_datetime(user_inputs_df['requestedDeparture'], utc=True).apply(convert_timezone)
-
 
 # Duplikate in user_inputs_df löschen
 duplikate_id_user = user_inputs_df[user_inputs_df.duplicated()]
