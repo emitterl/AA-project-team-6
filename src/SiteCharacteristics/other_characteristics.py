@@ -27,4 +27,4 @@ print(f"Frühster Wert: {df[df['spaceID'] == '11900388']['connectionTime'].min()
 print(f"Spätester Wert: {df[df['spaceID'] == '11900388']['connectionTime'].max()}")
 
 print(f"Insgesamt frühster Wert: {df_site2['connectionTime'].min()}")
-print(f"Insgesamt frühster Wert: {df_site2['connectionTime'].max()}")
+print(f"Insgesamt spätester Wert: {df_site2['connectionTime'].max()}")

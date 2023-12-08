@@ -35,3 +35,9 @@
 
 - site 1: 33629
 - site 2: 31408
+
+## Komische spaceID 11900388 in site 2:
+
+- Ist vermutlich erst später dazu gekommen:
+  - fühester Wert in site 2: 2018-04-25
+  - frühester Wert von der spaceID: 2020-11-18
