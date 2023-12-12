@@ -15,6 +15,7 @@ max = conDiffPos.max()
 min = conDiffPos.min()
 # Group by hour and count values
 diffCounts = conDiffPos.apply(lambda x : (x/np.timedelta64(1, 'h'))).astype(int).value_counts().sort_index()
+diffCountsZoom = diffCounts[diffCounts.values > 50]
 
 ## Plot
 plt.figure(figsize=(8, 6))
@@ -23,10 +24,18 @@ plt.plot(diffCounts.index, diffCounts.values)
 
 plt.xlabel('Total hours (rounded)')
 plt.ylabel('Sum of Charging Sessions')
-plt.title('Difference of doneChargingTime and DisconnectionTime')
-plt.text(80, 0.9, f'Max: {max}\n Min: {min}', horizontalalignment='center', verticalalignment='center')
+plt.title('Difference of doneChargingTime and disconnectionTime')
+plt.text(80, 0, f'Max: {max}\n Min: {min}', horizontalalignment='center', verticalalignment='center')
 plt.show()
 
+plt.figure(figsize=(8, 6))
+
+plt.plot(diffCountsZoom.index, diffCountsZoom.values)
+
+plt.xlabel('Total hours (rounded)')
+plt.ylabel('Sum of Charging Sessions')
+plt.title('Difference of doneChargingTime and disconnectionTime (zoom -> sum > 50)')
+plt.show()
 
 # KPI - recurring users
 
