@@ -55,7 +55,11 @@ df.drop(df.columns[df.columns.str.contains('unnamed',case = False)],axis = 1, in
 df.drop(df.columns[df.columns.str.contains('timezone',case = False)],axis = 1, inplace = True)
 df.drop(['sessionID', 'stationID'], axis=1, inplace=True)
 
+# Löscht alle Duplikate
 df = df.drop_duplicates()
+
+# Setzt überall, wo die doneChargingTime später als die disconnectTime ist, die doneChargingTime auf die disconnectTime
+df.loc[df['doneChargingTime'] > df['disconnectTime'], 'doneChargingTime'] = df['disconnectTime']
 
 
 # Erstelle DataFrame user_inputs_df
