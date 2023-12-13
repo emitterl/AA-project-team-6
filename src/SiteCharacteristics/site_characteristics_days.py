@@ -16,8 +16,15 @@ df_site1 = df[df['siteID'] == '1']
 df_site2 = df[df['siteID'] == '2']
 
 
-connection_counts_site1 = df_site1['connectionTime'].dt.day_of_week.value_counts().sort_index()
-connection_counts_site2 = df_site2['connectionTime'].dt.day_of_week.value_counts().sort_index()
+df_site1['weekday'] = df_site1['connectionTime'].dt.day_name()
+df_site2['weekday'] = df_site2['connectionTime'].dt.day_name()
+
+
+weekdays_order = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+
+connection_counts_site1 = df_site1['weekday'].value_counts().reindex(weekdays_order)
+connection_counts_site2 = df_site2['weekday'].value_counts().reindex(weekdays_order)
+
 
 
 fig, axs = plt.subplots(1, 2, figsize=(15, 10))
