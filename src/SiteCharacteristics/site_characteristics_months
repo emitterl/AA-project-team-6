@@ -2,12 +2,12 @@ import sys
 import os
 import matplotlib.pyplot as plt
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from data_preparation import df
+from data_preparation import merged_df
 
 
 
-df_site1 = df[df['siteID'] == '1']
-df_site2 = df[df['siteID'] == '2']
+df_site1 = merged_df[merged_df['siteID'] == '1']
+df_site2 = merged_df[merged_df['siteID'] == '2']
 
 # Funktion zur Berechnung der Varianz der Verbindungen pro Monat
 def calculate_monthly_variance(df):

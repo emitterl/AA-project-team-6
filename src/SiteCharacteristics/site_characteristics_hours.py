@@ -4,7 +4,7 @@ import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from data_preparation import df
+from data_preparation import merged_df
 import matplotlib.pyplot as plt
 
 from datetime import datetime, timedelta
@@ -36,8 +36,8 @@ def calculate_variance_in_hours(df_column):
 
 
 # Filtern der Daten für jede Site
-df_site1 = df[df['siteID'] == '1']
-df_site2 = df[df['siteID'] == '2']
+df_site1 = merged_df[merged_df['siteID'] == '1']
+df_site2 = merged_df[merged_df['siteID'] == '2']
 
 mean_conn_site1 = calculate_average_time(df_site1['connectionTime'])
 mean_conn_site2 = calculate_average_time(df_site2['connectionTime'])

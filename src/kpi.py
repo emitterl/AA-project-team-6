@@ -1,4 +1,4 @@
-from data_preparation import df, user_inputs_df
+from data_preparation import merged_df
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -7,9 +7,10 @@ import numpy as np
 # Car is connected but is fully charged
 
 # Calculcate difference of disconnect and doneCharging times
-conDiff = df['disconnectTime'] - df['doneChargingTime']
+conDiff = merged_df['disconnectTime'] - merged_df['doneChargingTime']
+conDiff = conDiff.dropna()
 # Filter negative values
-conDiffPos = conDiff[conDiff.values > pd.Timedelta(0)].sort_values(ascending=True)
+conDiffPos = conDiff.sort_values(ascending=True)
 
 max = conDiffPos.max()
 min = conDiffPos.min()
@@ -39,7 +40,7 @@ plt.show()
 
 # KPI - recurring users
 
-dfUsers = df.loc[:, ('userID', 'connectionTime')] 
+dfUsers = merged_df.loc[:, ('userID', 'connectionTime')] 
 dfUsers['connectionTime'] = dfUsers['connectionTime'].dt.date
 # recurringUsers = dfUsers[dfUsers.groupby('userID').userID.transform(len) > 1]
 recurringUsers = dfUsers['userID'].value_counts().sort_values()
@@ -47,16 +48,10 @@ recurringUsers = dfUsers['userID'].value_counts().sort_values()
 
 # KPI - Difference of kWhRequested and kWhDelivered
 
-# Find rows with latest modified time per ID
-idx_max_values = user_inputs_df.groupby('id')['modifiedAt'].idxmax()
-# Filter dataframe with latest modified times per ID
-filtered_user_df = user_inputs_df.loc[idx_max_values]
-# Merge dataframe and filtered user dataframe
-merged_table = pd.merge(df.drop('userID', axis=1), filtered_user_df, on='id', how='inner')
-# Calculate difference of delivered and requested kWh per session
-merged_table['kwhDiff'] = merged_table['kWhDelivered'] - merged_table['kWhRequested']
+rows_with_userInputs = merged_df[merged_df['kWhRequested'].notna() & (merged_df['kWhRequested'] != '')]
+rows_with_userInputs['kwhDiff'] = rows_with_userInputs['kWhDelivered'] - rows_with_userInputs['kWhRequested']
 
-kwhDiffCounts = merged_table['kwhDiff'].value_counts().sort_index()
+kwhDiffCounts = rows_with_userInputs['kwhDiff'].value_counts().sort_index()
 
 ## Plot
 plt.figure(figsize=(8, 6))
