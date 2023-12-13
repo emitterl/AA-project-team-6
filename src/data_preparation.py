@@ -48,9 +48,6 @@ df['stationID'] = df['stationID'].astype(str)
 df['timezone'] = df['timezone'].astype(str)
 df['userID'] = df['userID'].astype(str)
 
-df['connectionTime'] = df['connectionTime'].apply(convert_timezone)
-df['disconnectTime'] = df['disconnectTime'].apply(convert_timezone)
-df['doneChargingTime'] = df['doneChargingTime'].apply(convert_timezone)
     
 
 # Löscht Spalte Unnamed, stationID, sessionID und anschließend alle Duplikate    
@@ -80,13 +77,28 @@ user_inputs_df['minutesAvailable'] = user_inputs_df['minutesAvailable'].astype(f
 user_inputs_df['modifiedAt'] = pd.to_datetime(user_inputs_df['modifiedAt'], utc=True).apply(convert_timezone)
 user_inputs_df['requestedDeparture'] = pd.to_datetime(user_inputs_df['requestedDeparture'], utc=True).apply(convert_timezone)
 
-# Duplikate in user_inputs_df löschen
-duplikate_id_user = user_inputs_df[user_inputs_df.duplicated()]
-user_inputs_df = user_inputs_df.drop_duplicates()
-
 # Handle missing values (in progress)
 dfNan = df[df.isna().any(axis=1)]
 
 # Erste Zeilen der importierten Daten anzeigen von charging_sessions und user_inputs
 print(df.head())
 print(user_inputs_df.head())
+
+user_inputs_df = user_inputs_df.drop('userID', axis=1, errors='ignore')
+
+# Sortieren des user_inputs_df nach 'reference_id' und 'modifiedAt', um den neuesten Eintrag für jede ID zu erhalten
+user_inputs_df_sorted = user_inputs_df.sort_values(by=['reference_id', 'modifiedAt'], ascending=[True, False])
+
+# Behalten nur des neuesten Eintrags für jede reference_id
+user_inputs_df_latest = user_inputs_df_sorted.drop_duplicates(subset=['reference_id'])
+
+# Merge des df mit user_inputs_df_latest
+# Wir verwenden einen left join, um sicherzustellen, dass alle Zeilen aus df beibehalten werden
+merged_df = pd.merge(df, user_inputs_df_latest, how='left', left_on='id', right_on='reference_id')
+
+# Entfernen der Spalte 'reference_id', da sie identisch mit 'id' ist
+merged_df.drop('reference_id', axis=1, inplace=True)
+
+
+# Anzeigen der ersten Zeilen des finalen DataFrames
+print(merged_df)
