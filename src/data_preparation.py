@@ -50,10 +50,9 @@ df['userID'] = df['userID'].astype(str)
 
     
 
-# Löscht Spalte Unnamed, stationID, sessionID und anschließend alle Duplikate    
+# Löscht Spalten Unnamed, stationID, sessionID   
 df.drop(df.columns[df.columns.str.contains('unnamed',case = False)],axis = 1, inplace = True)
-df.drop(df.columns[df.columns.str.contains('timezone',case = False)],axis = 1, inplace = True)
-df.drop(['sessionID', 'stationID'], axis=1, inplace=True)
+df.drop(['sessionID', 'stationID', 'timezone'], axis=1, inplace=True)
 
 # Löscht alle Duplikate
 df = df.drop_duplicates()
@@ -97,12 +96,12 @@ user_inputs_df_sorted = user_inputs_df.sort_values(by=['reference_id', 'modified
 user_inputs_df_latest = user_inputs_df_sorted.drop_duplicates(subset=['reference_id'])
 
 # Merge des df mit user_inputs_df_latest
-# Wir verwenden einen left join, um sicherzustellen, dass alle Zeilen aus df beibehalten werden
+# left join, um sicherzustellen, dass alle Zeilen aus df beibehalten werden
 merged_df = pd.merge(df, user_inputs_df_latest, how='left', left_on='id', right_on='reference_id')
 
 # Entfernen der Spalte 'reference_id', da sie identisch mit 'id' ist
 merged_df.drop('reference_id', axis=1, inplace=True)
 
 
-# Anzeigen der ersten Zeilen des finalen DataFrames
+# Anzeigen der ersten Zeilen des gemergten DataFrames
 print(merged_df)
