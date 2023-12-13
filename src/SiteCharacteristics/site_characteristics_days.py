@@ -1,0 +1,38 @@
+import sys
+import os
+
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from data_preparation import df
+import matplotlib.pyplot as plt
+
+from datetime import datetime, timedelta
+
+
+
+# Filtern der Daten für jede Site
+df_site1 = df[df['siteID'] == '1']
+df_site2 = df[df['siteID'] == '2']
+
+
+connection_counts_site1 = df_site1['connectionTime'].dt.day_of_week.value_counts().sort_index()
+connection_counts_site2 = df_site2['connectionTime'].dt.day_of_week.value_counts().sort_index()
+
+
+fig, axs = plt.subplots(1, 2, figsize=(15, 10))
+
+# Site 1 Connection
+axs[0].bar(connection_counts_site1.index, connection_counts_site1.values)
+axs[0].set_title('Connections per Weekday for Site 1')
+axs[0].set_xlabel('Day of the week')
+axs[0].set_ylabel('Number of Connections')
+
+# Site 2 Connection
+axs[1].bar(connection_counts_site2.index, connection_counts_site2.values)
+axs[1].set_title('Connections per Weekday for Site 2')
+axs[1].set_xlabel('Day of the weeky')
+axs[1].set_ylabel('Number of Connections')
+
+plt.tight_layout()
+plt.show()
