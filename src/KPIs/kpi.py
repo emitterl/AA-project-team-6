@@ -126,38 +126,38 @@ grouped_chargingSpeed_mean_site2 = df_site2_with_doneChargingTim.groupby('spaceI
 ## Plot
 fig, axs = plt.subplots(2, 1, figsize=(25, 15))
 
-# Mean charging speed per minute and spaceID
+# Mean charging speed per minute and space
 axs[0].bar(grouped_chargingSpeed_mean_min.index, grouped_chargingSpeed_mean_min.values)
 axs[0].set_xlabel('Space ID')
 axs[0].set_ylabel('Charging speed (kW/Minute)')
-axs[0].set_title('Mean charging speed per minute and Space ID')
+axs[0].set_title('Mean charging speed per minute and Space')
 axs[0].set_xticks(grouped_chargingSpeed_mean_min.index)
 axs[0].set_xticklabels(grouped_chargingSpeed_mean_min.index, rotation=45, ha='right') 
 
-# Mean charging speed per hour and spaceID
+# Mean charging speed per hour and space
 axs[1].bar(grouped_chargingSpeed_mean_hour.index, grouped_chargingSpeed_mean_hour.values)
 axs[1].set_xlabel('Space ID')
 axs[1].set_ylabel('Charging speed (kW)')
-axs[1].set_title('Mean charging speed per hour and Space ID')
+axs[1].set_title('Mean charging speed per hour and Space')
 axs[1].set_xticks(grouped_chargingSpeed_mean_hour.index)
 axs[1].set_xticklabels(grouped_chargingSpeed_mean_hour.index, rotation=45, ha='right') 
 
 ## Plot per site
 fig, axs = plt.subplots(1, 2, figsize=(25, 5))
 
-# Mean charging speed per spaceID for Site 1
+# Mean charging speed per space for Site 1
 axs[0].bar(grouped_chargingSpeed_mean_site1.index, grouped_chargingSpeed_mean_site1.values)
 axs[0].set_xlabel('Space ID')
 axs[0].set_ylabel('Charging speed (kW)')
-axs[0].set_title('Mean charging speed per Space ID for Site 1')
+axs[0].set_title('Mean charging speed per Space for Site 1')
 axs[0].set_xticks(grouped_chargingSpeed_mean_site1.index)
 axs[0].set_xticklabels(grouped_chargingSpeed_mean_site1.index, rotation=45, ha='right') 
 
-# Mean charging speed per spaceID for Site 2
+# Mean charging speed per space for Site 2
 axs[1].bar(grouped_chargingSpeed_mean_site2.index, grouped_chargingSpeed_mean_site2.values)
 axs[1].set_xlabel('Space ID')
 axs[1].set_ylabel('Charging speed (kW)')
-axs[1].set_title('Mean charging speed per Space ID for Site 2')
+axs[1].set_title('Mean charging speed per Space for Site 2')
 axs[1].set_xticks(grouped_chargingSpeed_mean_site2.index)
 axs[1].set_xticklabels(grouped_chargingSpeed_mean_site2.index, rotation=45, ha='right') 
 
