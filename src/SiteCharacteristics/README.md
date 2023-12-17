@@ -5,7 +5,7 @@
 - site 1: 52
 - site 2: 55
 
-## Names of SpraceIDs:
+## Names of SpaceIDs:
 
 - site 1: ['AG-3F30' 'AG-1F01' 'AG-1F03' 'AG-1F04' 'AG-1F06' 'AG-1F13' 'AG-1F09'
   'AG-4F34' 'AG-1F11' 'AG-1F08' 'AG-3F22' 'AG-1F14' 'AG-1F07' 'AG-1F12'
