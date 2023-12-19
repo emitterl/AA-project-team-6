@@ -85,7 +85,7 @@ axs[1, 0].set_title('Overlaid view')
 axs[1, 0].legend()
 
 # Difference of disconnect and doneCharging time equals zero with a different scale
-axs[1, 1].bar(diff_connection_zero_count.index, diff_connection_zero_count.values)
+axs[1, 1].bar(diff_connection_zero_count.index, diff_connection_zero_count.values, color='red')
 axs[1, 1].set_xlabel('Difference of delivered and requested kWh')
 axs[1, 1].set_ylabel('Total number')
 axs[1, 1].set_title('Disconnected after full charge (zoom)')
@@ -166,26 +166,30 @@ plt.show()
 
 # KPI - registered and non-registered users
 
-# Create new Dataframe with values where userInputs are provided
-rows_without_userInputs = merged_df.loc[merged_df.modifiedAt.isna() | (merged_df.modifiedAt == '')].copy()
+# Create new Dataframes for registered and non-registered users
+rows_with_userId = merged_df.loc[merged_df.userID != 'nan'].copy()
+rows_without_userId = merged_df.loc[merged_df.userID == 'nan'].copy()
 
-# Berechnen der Anzahl der Verbindungen pro Stunde für jede Site
-connection_counts_userInputs = rows_with_userInputs['connectionTime'].dt.hour.value_counts().sort_index()
-connection_counts_noUserInputs = rows_without_userInputs['connectionTime'].dt.hour.value_counts().sort_index()
+# Calculate number of connected registered and non-registered users each hour
+connection_counts_userId = rows_with_userId['connectionTime'].dt.hour.value_counts().sort_index()
+connection_counts_noUserId = rows_without_userId['connectionTime'].dt.hour.value_counts().sort_index()
 
 ## Plot
 fig, axs = plt.subplots(1, 2, figsize=(15, 5))
+maxY = connection_counts_userId.values.max()+(connection_counts_userId.values.max()/10)
 
 # Connection Time per Hour by registered Users
-axs[0].bar(connection_counts_userInputs.index, connection_counts_userInputs.values)
+axs[0].bar(connection_counts_userId.index, connection_counts_userId.values)
 axs[0].set_xlabel('Hour of the Day')
 axs[0].set_ylabel('Number of Connections')
 axs[0].set_title('Connection Time per Hour by registered Users')
+axs[0].set_ylim(0, maxY)
 
 # Connection Time per Hour by non-registered Users
-axs[1].bar(connection_counts_noUserInputs.index, connection_counts_noUserInputs.values)
+axs[1].bar(connection_counts_noUserId.index, connection_counts_noUserId.values)
 axs[1].set_xlabel('Hour of the Day')
 axs[1].set_ylabel('Number of Connections')
 axs[1].set_title('Connection Time per Hour by non-registered Users')
+axs[1].set_ylim(0, maxY)
 
 plt.show()
