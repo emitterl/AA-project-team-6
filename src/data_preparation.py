@@ -37,9 +37,9 @@ def convert_timezone(time):
 
 # Konvertieren der Datentypen in charging_sessions
 df['id'] = df['id'].astype(str)
-df['connectionTime'] = pd.to_datetime(df['connectionTime'], utc=True).apply(convert_timezone)
-df['disconnectTime'] = pd.to_datetime(df['disconnectTime'], utc=True).apply(convert_timezone)
-df['doneChargingTime'] = pd.to_datetime(df['doneChargingTime'], utc=True).apply(convert_timezone)
+df['connectionTime'] = pd.to_datetime(df['connectionTime'], utc=True, errors='coerce').apply(convert_timezone)
+df['disconnectTime'] = pd.to_datetime(df['disconnectTime'], utc=True, errors='coerce').apply(convert_timezone)
+df['doneChargingTime'] = pd.to_datetime(df['doneChargingTime'], utc=True, errors='coerce').apply(convert_timezone)
 df['kWhDelivered'] = df['kWhDelivered'].astype(float)
 df['sessionID'] = df['sessionID'].astype(str)
 df['siteID'] = df['siteID'].astype(str)
@@ -60,6 +60,9 @@ df = df.drop_duplicates()
 # Setzt überall, wo die doneChargingTime später als die disconnectTime ist, die doneChargingTime auf die disconnectTime
 df.loc[df['doneChargingTime'] > df['disconnectTime'], 'doneChargingTime'] = df['disconnectTime']
 
+
+# Lösche doneChargingTime überall, wo es vor connectionTime ist
+df.loc[df['doneChargingTime'] < df['connectionTime'], 'doneChargingTime'] = pd.NaT
 
 # Erstelle DataFrame user_inputs_df
 user_inputs_list = df.apply(parse_user_inputs, axis=1)
