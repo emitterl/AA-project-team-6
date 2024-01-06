@@ -15,6 +15,8 @@ for year in years:
 
     # Nur internationale Feiertage oder Feiertage in Kalifornien
     df = df[(pd.isna(df['region'])) | (df['region'] == 'CA')]
+
+    
     
     # Hinzufügen des DataFrame zur Liste
     dataframes.append(df)
@@ -24,5 +26,9 @@ holiday_df = pd.concat(dataframes)
 
 # Entfernen der Spalten 'locale', 'types', 'notes' und 'region'
 holiday_df.drop(['locale', 'type', 'notes', 'region'], axis=1, inplace=True)
+
+# Konvertierung der Datentypen
+holiday_df['date'] = pd.to_datetime(holiday_df['date']).dt.date
+holiday_df['description'] = holiday_df['description'].astype(str)
 
 print(holiday_df.head)
