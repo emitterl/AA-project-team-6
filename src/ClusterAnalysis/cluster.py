@@ -28,14 +28,10 @@ dropped_df = dropped_df.dropna()
 scaler = MinMaxScaler()
 scaled = scaler.fit_transform(dropped_df)
 scaled_df = pd.DataFrame(scaled, columns=dropped_df.columns, index=dropped_df.index)
-
-# ergibt keinen Sinn (ändert nichts), aber führt sonst Fehler
 scaled_reshape  = np.reshape(scaled, (-1, 5))
-# print('x', scaled.ndim)
-# print('reshape', scaled_reshape.ndim)
 
-# Residual loss -> number of clusters between 3 and 5
-k_max = 50  # We have c. 65_000 datapoints, more than 21_000 clusters are definitely not reasonable!
+# Residual loss
+k_max = 50
 
 clusters = []
 losses = []
@@ -55,8 +51,7 @@ plt.show()
 ## K Means
 numbers = ["one", "two", "three", "four"]
 
-# After deciding on number of clusters = 3
-# refit algorithm
+# 3 clusters
 three_means = KMeans(n_clusters=3, n_init='auto')
 three_means.fit(scaled_reshape)
 
