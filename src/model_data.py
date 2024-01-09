@@ -7,7 +7,7 @@ df = merged_df
 # Zeitbereich definieren
 start_time = df['connectionTime'].min()
 end_time = df['disconnectTime'].max()
-time_range = pd.date_range(start=start_time, end=end_time, freq='H')
+time_range = pd.date_range(start=start_time, end=end_time, freq='H', tz='America/Los_Angeles')
 
 results = []
 # Durchgehen der Zeitpunkte und Berechnung der belegten Säulen
