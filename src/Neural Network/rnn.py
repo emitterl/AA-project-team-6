@@ -82,7 +82,7 @@ day_utilization.head()
 #make life easier
 day_utilization.columns = ["h"+ str(x) for x in range(0, 24)]
 
-#isolate the original series of demand data
+#isolate the original series of data
 utilization_univar = df['value']
 
 fig, axs = plt.subplots(1,2, figsize=(20,8))
@@ -121,7 +121,7 @@ def normalize_df(data):
     
     return data, scaler
 
-#normalize the energy dataframe
+#normalize the utilization dataframe
 day_utilization_normed, scaler = normalize_df(day_utilization)
 
 def split_sequences(sequences, n_steps, extra_lag=False, long_lag_step=7, max_step=30, idx=0, multivar=False):
@@ -161,7 +161,7 @@ def split_sequences(sequences, n_steps, extra_lag=False, long_lag_step=7, max_st
     y = np.array(y)
     
     if multivar:
-        #unstack the 3rd dimension and select the first element(energy load)
+        #unstack the 3rd dimension and select the first element(utilization load)
         y = y[:,idx]
     
     return X, y
@@ -339,4 +339,4 @@ for week in range(36):
 
     fig.add_subplot()
     preds_df.iloc[week*7*24:(week+1)*7* 24].plot()
-    plt.title(f'Consumption profile for 2021 Week: {week+1}')
+    plt.title(f'utilization profile for 2021 Week: {week+1}')
