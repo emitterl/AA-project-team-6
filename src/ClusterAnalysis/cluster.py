@@ -6,13 +6,13 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from data_preparation import merged_df
 import pandas as pd
 import matplotlib.pyplot as plt
-from matplotlib.ticker import MaxNLocator
 import numpy as np
 import seaborn as sns
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.cluster import KMeans, AgglomerativeClustering
 from scipy.cluster.hierarchy import dendrogram
 
+## Data preparation
 dropped_df = merged_df.sample(n=3_000, random_state=42)
 dropped_df.drop('id', axis=1, inplace=True)
 dropped_df.drop('siteID', axis=1, inplace=True)
@@ -25,12 +25,14 @@ dropped_df.drop('modifiedAt', axis=1, inplace=True)
 dropped_df.drop('requestedDeparture', axis=1, inplace=True)
 dropped_df = dropped_df.dropna()
 
+
+## Scale data
 scaler = MinMaxScaler()
 scaled = scaler.fit_transform(dropped_df)
 scaled_df = pd.DataFrame(scaled, columns=dropped_df.columns, index=dropped_df.index)
 scaled_reshape  = np.reshape(scaled, (-1, 5))
 
-# Residual loss
+## Residual loss plot
 k_max = 50
 
 clusters = []
@@ -78,21 +80,17 @@ sns.pairplot(data=scaled_df, hue="four")
 
 ## Hierarchical clustering
 def plot_dendrogram(model, **kwargs):
-
-    # Children of hierarchical clustering
     children = model.children_
 
     # Distances between each pair of children
-    # Since we don't have this information, we can use a uniform one for plotting
     distance = np.arange(children.shape[0])
 
-    # The number of observations contained in each cluster level
+    # Number of observations included in each cluster levelel
     no_of_observations = np.arange(2, children.shape[0]+2)
 
-    # Create linkage matrix and then plot the dendrogram
+    # Create a linkage matrix
     linkage_matrix = np.column_stack([children, distance, no_of_observations]).astype(float)
 
-    # Plot the corresponding dendrogram
     dendrogram(linkage_matrix, **kwargs)
 
 
