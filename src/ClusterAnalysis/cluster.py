@@ -1,7 +1,6 @@
 import sys
 import os
 
-
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from data_preparation import merged_df
@@ -10,14 +9,11 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator
 import numpy as np
 import seaborn as sns
-from sklearn.preprocessing import StandardScaler, MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler
 from sklearn.cluster import KMeans, AgglomerativeClustering
 from scipy.cluster.hierarchy import dendrogram
 
-# sns.pairplot(data=merged_df)
-
-#dropped_df = merged_df.sample(n=3_000)
-dropped_df = merged_df.copy()
+dropped_df = merged_df.sample(n=3_000, random_state=42)
 dropped_df.drop('id', axis=1, inplace=True)
 dropped_df.drop('siteID', axis=1, inplace=True)
 dropped_df.drop('spaceID', axis=1, inplace=True)
@@ -29,11 +25,6 @@ dropped_df.drop('modifiedAt', axis=1, inplace=True)
 dropped_df.drop('requestedDeparture', axis=1, inplace=True)
 dropped_df = dropped_df.dropna()
 
-# scaler = StandardScaler()
-# scaler.fit(dropped_df)
-# scaled = scaler.transform(dropped_df)
-# scaled_df = pd.DataFrame(scaled, columns=dropped_df.columns, index=dropped_df.index)
-
 scaler = MinMaxScaler()
 scaled = scaler.fit_transform(dropped_df)
 scaled_df = pd.DataFrame(scaled, columns=dropped_df.columns, index=dropped_df.index)
@@ -42,13 +33,6 @@ scaled_df = pd.DataFrame(scaled, columns=dropped_df.columns, index=dropped_df.in
 scaled_reshape  = np.reshape(scaled, (-1, 5))
 # print('x', scaled.ndim)
 # print('reshape', scaled_reshape.ndim)
-
-# sns.pairplot(data=scaled_df)
-
-# How many clusters? (use combination of all three)
-# 1. Use expert knowledge
-# 2. Plot residual loss for different number of clusters, find 'elbow' and select corresponding number of clusters
-# 3. Use hierarchical clustering to detect suitable braching and corresponding number of clusters
 
 # Residual loss -> number of clusters between 3 and 5
 k_max = 50  # We have c. 65_000 datapoints, more than 21_000 clusters are definitely not reasonable!
@@ -68,19 +52,8 @@ plt.xlabel("Number of clusters")
 plt.xlim([0,10])
 plt.show()
 
-# K Means
-# 2 clusters
-two_means = KMeans(n_clusters=2, n_init='auto')
-two_means.fit(scaled_reshape)
-
-# match records to clusters by calling predict
-two_means.predict(scaled_reshape)
-
-numbers = ["one", "two", "three", "four", "five"]
-scaled_df["two"] = two_means.predict(scaled_reshape)
-scaled_df["two"] = scaled_df["two"].apply(lambda x: numbers[x])
-
-sns.pairplot(data=scaled_df, hue="two")
+## K Means
+numbers = ["one", "two", "three", "four"]
 
 # After deciding on number of clusters = 3
 # refit algorithm
@@ -129,25 +102,10 @@ def plot_dendrogram(model, **kwargs):
 
 
 agglo = AgglomerativeClustering(n_clusters=3) #The number of clusters to find
-# agglo = AgglomerativeClustering()
 y_pred_agglo = agglo.fit_predict(scaled_reshape)
-# agglo.fit(scaled_reshape)
 
 plt.figure(figsize=(40,15))
 plt.title('Hierarchical Clustering Dendrogram')
 plot_dendrogram(agglo, labels=agglo.labels_)
 plt.ylabel("Distance")
 plt.show()
-    
-# import scipy.cluster.hierarchy as sc
-
-# # Plot dendrogram
-# plt.figure(figsize=(20, 7))  
-# plt.title("Dendrograms")  
-
-# # Create dendrogram
-# sc.dendrogram(sc.linkage(scaled_reshape, method='ward'))
-
-# plt.title('Dendrogram')
-# plt.xlabel('Sample index')
-# plt.ylabel('Euclidean distance')
