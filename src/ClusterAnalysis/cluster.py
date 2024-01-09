@@ -1,3 +1,9 @@
+import sys
+import os
+
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from data_preparation import merged_df
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -10,7 +16,8 @@ from scipy.cluster.hierarchy import dendrogram
 
 # sns.pairplot(data=merged_df)
 
-dropped_df = merged_df.sample(n=400)
+#dropped_df = merged_df.sample(n=3_000)
+dropped_df = merged_df.copy()
 dropped_df.drop('id', axis=1, inplace=True)
 dropped_df.drop('siteID', axis=1, inplace=True)
 dropped_df.drop('spaceID', axis=1, inplace=True)
@@ -58,10 +65,23 @@ for k in range(k_max):
 plt.plot(clusters, losses)
 plt.ylabel("Loss")
 plt.xlabel("Number of clusters")
-plt.xlim([0,20])
+plt.xlim([0,10])
 plt.show()
 
-## K Means
+# K Means
+# 2 clusters
+two_means = KMeans(n_clusters=2, n_init='auto')
+two_means.fit(scaled_reshape)
+
+# match records to clusters by calling predict
+two_means.predict(scaled_reshape)
+
+numbers = ["one", "two", "three", "four", "five"]
+scaled_df["two"] = two_means.predict(scaled_reshape)
+scaled_df["two"] = scaled_df["two"].apply(lambda x: numbers[x])
+
+sns.pairplot(data=scaled_df, hue="two")
+
 # After deciding on number of clusters = 3
 # refit algorithm
 three_means = KMeans(n_clusters=3, n_init='auto')
@@ -70,11 +90,22 @@ three_means.fit(scaled_reshape)
 # match records to clusters by calling predict
 three_means.predict(scaled_reshape)
 
-numbers = ["one", "two", "three", "four", "five"]
 scaled_df["three"] = three_means.predict(scaled_reshape)
 scaled_df["three"] = scaled_df["three"].apply(lambda x: numbers[x])
 
 sns.pairplot(data=scaled_df, hue="three")
+
+# 4 clusters
+four_means = KMeans(n_clusters=4, n_init='auto')
+four_means.fit(scaled_reshape)
+
+# match records to clusters by calling predict
+four_means.predict(scaled_reshape)
+
+scaled_df["four"] = four_means.predict(scaled_reshape)
+scaled_df["four"] = scaled_df["four"].apply(lambda x: numbers[x])
+
+sns.pairplot(data=scaled_df, hue="four")
 
 
 ## Hierarchical clustering
