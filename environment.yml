@@ -1,0 +1,9 @@
+name: AA-Project
+channels:
+  - defaults
+dependencies:
+  - numpy
+  - pandas
+  - matplotlib
+  - scikit-learn
+  - seaborn
