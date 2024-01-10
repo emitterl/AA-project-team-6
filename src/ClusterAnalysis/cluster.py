@@ -13,27 +13,35 @@ from sklearn.cluster import KMeans, AgglomerativeClustering
 from scipy.cluster.hierarchy import dendrogram
 
 ## Data preparation
-dropped_df = merged_df.sample(n=3_000, random_state=42)
+dropped_df = merged_df.copy()#
+
+sns.pairplot(data=merged_df)
+
+
 dropped_df.drop('id', axis=1, inplace=True)
 dropped_df.drop('siteID', axis=1, inplace=True)
 dropped_df.drop('spaceID', axis=1, inplace=True)
 dropped_df.drop('userID', axis=1, inplace=True)
-dropped_df.drop('connectionTime', axis=1, inplace=True)
-dropped_df.drop('disconnectTime', axis=1, inplace=True)
-dropped_df.drop('doneChargingTime', axis=1, inplace=True)
 dropped_df.drop('modifiedAt', axis=1, inplace=True)
 dropped_df.drop('requestedDeparture', axis=1, inplace=True)
+dropped_df['connectionTime'] =  dropped_df['connectionTime'].dt.hour
+dropped_df['disconnectTime'] =  dropped_df['disconnectTime'].dt.hour
+dropped_df['doneChargingTime'] =  dropped_df['doneChargingTime'].dt.hour
 dropped_df = dropped_df.dropna()
+
+dropped_df = dropped_df.sample(n=3_000, random_state=42)
 
 
 ## Scale data
 scaler = MinMaxScaler()
 scaled = scaler.fit_transform(dropped_df)
 scaled_df = pd.DataFrame(scaled, columns=dropped_df.columns, index=dropped_df.index)
-scaled_reshape  = np.reshape(scaled, (-1, 5))
+scaled_reshape  = np.reshape(scaled, (-1, 8))
+
+sns.pairplot(data=scaled_df)
 
 ## Residual loss plot
-k_max = 50
+k_max = 15
 
 clusters = []
 losses = []
@@ -47,7 +55,6 @@ for k in range(k_max):
 plt.plot(clusters, losses)
 plt.ylabel("Loss")
 plt.xlabel("Number of clusters")
-plt.xlim([0,10])
 plt.show()
 
 ## K Means
