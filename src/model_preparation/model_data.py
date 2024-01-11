@@ -9,7 +9,7 @@ from data_preparation import merged_df
 from model_preparation.holiday_data import holiday_df
 from model_preparation.weather_data import hourly_dataframe
 
-df = merged_df.head(1000)
+df = merged_df
 
 # Zeitbereich definieren
 start_time = pd.to_datetime("2018-04-25 04:00:00").tz_localize('America/Los_Angeles')
@@ -42,4 +42,8 @@ model_df['Weekday'] = model_df['Weekday'].map(weekday_map)
 
 # Erste Zeilen anzeigen
 print(model_df.head())
+
+# Konvertieren der 'time'-Spalte in UTC vor dem Exportieren
+model_df['time'] = model_df['time'].dt.tz_convert('UTC')
+
 model_df.to_csv('model_data.csv', index=False)
