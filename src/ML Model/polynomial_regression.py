@@ -9,6 +9,16 @@ from sklearn.linear_model import Ridge
 from sklearn.metrics import mean_squared_error, r2_score
 from model_data import model_df
 
+
+
+model_df['Year'] = model_df['time'].dt.year
+model_df['Month'] = model_df['time'].dt.month
+model_df['Day'] = model_df['time'].dt.day
+model_df['Hour'] = model_df['time'].dt.hour
+
+model_df.drop('time', axis=1, inplace=True)
+
+
 model_df['siteIDIsOne'] = model_df['siteID'] == '1'
 model_df.drop('siteID', axis=1, inplace=True)
 

@@ -11,6 +11,14 @@ from sklearn.preprocessing import StandardScaler
 from model_data import model_df
 import pandas as pd
 
+
+model_df['Year'] = model_df['time'].dt.year
+model_df['Month'] = model_df['time'].dt.month
+model_df['Day'] = model_df['time'].dt.day
+model_df['Hour'] = model_df['time'].dt.hour
+
+model_df.drop('time', axis=1, inplace=True)
+
 # Umwandlung kategorialer Variablen in Dummy-Variablen
 model_df = pd.get_dummies(model_df, columns=['Weekday'])
 

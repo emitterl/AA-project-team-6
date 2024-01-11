@@ -8,3 +8,8 @@ dependencies:
   - scikit-learn
   - seaborn
   - scipy
+  - requests_cache
+  - ipykernel
+  - pip:
+      - openmeteo_requests
+      - retry_requests
