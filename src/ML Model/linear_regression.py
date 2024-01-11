@@ -8,7 +8,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-from model_preparation.model_data import model_df
+from model_preparation.import_model_data import model_df
 import pandas as pd
 
 
