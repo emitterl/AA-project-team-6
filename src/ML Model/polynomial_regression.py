@@ -7,7 +7,7 @@ from sklearn.preprocessing import PolynomialFeatures, StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import Ridge
 from sklearn.metrics import mean_squared_error, r2_score
-from model_data import model_df
+from model_preparation.model_data import model_df
 
 
 
@@ -23,11 +23,11 @@ model_df['siteIDIsOne'] = model_df['siteID'] == '1'
 model_df.drop('siteID', axis=1, inplace=True)
 
 # Umwandlung kategorialer Variablen in Dummy-Variablen
-model_df = pd.get_dummies(model_df, columns=['Weekday'])
+model_df = pd.get_dummies(model_df, columns=['Weekday', 'weather_description'])
 
 # Zielvariable und Merkmale trennen
-X = model_df.drop('occupied_count', axis=1)  # Merkmale
-y = model_df['occupied_count']               # Zielvariable
+X = model_df.drop('occupied_count', axis=1)  
+y = model_df['occupied_count']               
 
 # Aufteilung in Trainings- und Testdaten
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)

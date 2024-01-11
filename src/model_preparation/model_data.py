@@ -1,7 +1,13 @@
+import sys
+import os
+
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 import pandas as pd
 from data_preparation import merged_df
-from holiday_data import holiday_df
-from weather_data import hourly_dataframe
+from model_preparation.holiday_data import holiday_df
+from model_preparation.weather_data import hourly_dataframe
 
 df = merged_df.head(1000)
 
@@ -24,23 +30,16 @@ model_df = pd.DataFrame(results)
 # Hinzufügen der Feiertagsinformation
 model_df['is_holiday'] = model_df['time'].dt.date.isin(holiday_df['date'])
 
-# Vereinigen der DataFrames
-# Angenommen, 'time' ist der gemeinsame Schlüssel
+# Hinzufügen des Wetterdaten-Dataframes
 model_df = model_df.merge(hourly_dataframe, on='time', how='left')
 
-# Zerlegen des 'time'-Objekts in Jahr, Monat, Tag und Stunde
-# model_df['Year'] = model_df['time'].dt.year
-# model_df['Month'] = model_df['time'].dt.month
-# model_df['Day'] = model_df['time'].dt.day
-# model_df['Hour'] = model_df['time'].dt.hour
 model_df['Weekday'] = model_df['time'].dt.dayofweek 
 
 # Umwandlung der Wochentag-Integer in Wochentag-Namen
 weekday_map = {0: 'Monday', 1: 'Tuesday', 2: 'Wednesday', 3: 'Thursday', 4: 'Friday', 5: 'Saturday', 6: 'Sunday'}
 model_df['Weekday'] = model_df['Weekday'].map(weekday_map)
 
-# Entfernen der ursprünglichen 'time'-Spalte
-# model_df.drop('time', axis=1, inplace=True)
 
 # Erste Zeilen anzeigen
 print(model_df.head())
+model_df.to_csv('model_data.csv', index=False)

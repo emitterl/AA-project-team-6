@@ -8,7 +8,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-from model_data import model_df
+from model_preparation.model_data import model_df
 import pandas as pd
 
 
@@ -20,7 +20,7 @@ model_df['Hour'] = model_df['time'].dt.hour
 model_df.drop('time', axis=1, inplace=True)
 
 # Umwandlung kategorialer Variablen in Dummy-Variablen
-model_df = pd.get_dummies(model_df, columns=['Weekday'])
+model_df = pd.get_dummies(model_df, columns=['Weekday', 'weather_description'])
 
 model_df['siteIDIsOne'] = model_df['siteID'] == '1'
 model_df.drop('siteID', axis=1, inplace=True)
