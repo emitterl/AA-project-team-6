@@ -106,10 +106,10 @@ merged_df = pd.merge(df, user_inputs_df_latest, how='left', left_on='id', right_
 merged_df.drop('reference_id', axis=1, inplace=True)
 
 #Außreißer entfernen
-merged_df = merged_df.drop(merged_df[merged_df.kWhDelivered >=108.4].index, axis=0) #Akutelle Elektroautos können maximal 108.4 kWh laden (siehe https://einfacheauto.de/blog/e-auto-batteriekapazitaet#welche-zehn-e-autos-haben-den-groten-akku-verbaut) . Alles darüber hinaus wird aussortiert.
+merged_df = merged_df.drop(merged_df[merged_df.kWhDelivered >=108.4].index, axis=0) #Akutelle Elektroautos können maximal 108.4 kWh laden (siehe https://einfacheauto.de/blog/e-auto-batteriekapazitaet#welche-zehn-e-autos-haben-den-groten-akku-verbaut)
 merged_df = merged_df.drop(merged_df[merged_df.kWhRequested == 0].index, axis=0) #Alle Werte in denen kWhRequestet 0 ist, werden aussortiert.
 merged_df = merged_df.drop(merged_df[merged_df.milesRequested == 0].index, axis=0) #Alle Werte in denen milesRequestet 0 ist, werden aussortiert.
-merged_df = merged_df.drop(merged_df[merged_df.minutesAvailable == merged_df.minutesAvailable.max()].index, axis=0) #Extremer Außreiser. Wird aussortiert
+merged_df = merged_df.drop(merged_df[merged_df.minutesAvailable == merged_df.minutesAvailable.max()].index, axis=0) #Extremer Ausreißer. Wird aussortiert
 
 
 # Anzeigen der ersten Zeilen des gemergten DataFrames
