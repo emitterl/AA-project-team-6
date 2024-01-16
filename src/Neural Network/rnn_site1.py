@@ -1,55 +1,38 @@
 import sys
 import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 import numpy as np
 import matplotlib.pyplot as plt
-
 import seaborn as sns
 import pandas as pd
 from datetime import datetime, timedelta
-
 import warnings
 warnings.filterwarnings('ignore')
-import os
 os.environ["KERAS_BACKEND"] = "torch"
 import keras
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import TimeSeriesSplit
-
 from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
+from model_preparation.import_model_data import model_df
 
 
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-from data_preparation import merged_df
-
-#Get max and min connection datetime
-
-merged_df['connectionTime'].min(), merged_df['connectionTime'].max()
-
-#Calculate the utilization
-
-df = merged_df[['id', 'connectionTime', 'disconnectTime']]
-
-df['startDate']= pd.to_datetime(merged_df["connectionTime"].dt.strftime('%Y-%m-%d %H'))
-df['endDate']= pd.to_datetime(merged_df["disconnectTime"].dt.strftime('%Y-%m-%d %H'))
-
-s = (pd.concat([pd.Series(r.id,pd.date_range(r.startDate, r.endDate, freq='H')) 
-               for r in df.itertuples()])
-       .index
-       .value_counts()
-       .sort_index())
+#Create work Dataframe
+df = model_df[['time', 'occupied_count', 'siteID']]
+df = df[df['siteID'] == '1']
+df.drop('siteID', axis=1, inplace=True)
 
 #Create a Dataframe for the max and min datetime
-
-df = pd.DataFrame({'index':s.index, 'value':s.values})
-df['index'] = pd.to_datetime(df['index'])
+df['index'] = pd.to_datetime(df['time'])
 df = df.set_index(df['index']).resample('H').ffill()
-df = df[['value']]
+df = df[['occupied_count']]
+df = df.rename(columns={'occupied_count': 'value'})
 
 null_vals = df.isnull().sum()
 print('Null values in the target column {}'.format(null_vals))
-df
+
 
 #Transform data to hour by hour for every day
 
