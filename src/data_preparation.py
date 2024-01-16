@@ -105,6 +105,14 @@ merged_df = pd.merge(df, user_inputs_df_latest, how='left', left_on='id', right_
 # Entfernen der Spalte 'reference_id', da sie identisch mit 'id' ist
 merged_df.drop('reference_id', axis=1, inplace=True)
 
+# Entfernen von Ausreißern
+merged_df = merged_df.drop(merged_df[merged_df.kWhRequested == 0].index, axis=0) #Alle Werte in denen kWhRequestet 0 ist, werden aussortiert.
+merged_df = merged_df.drop(merged_df[merged_df.milesRequested == 0].index, axis=0) #Alle Werte in denen milesRequestet 0 ist, werden aussortiert.
+merged_df = merged_df.drop(merged_df[merged_df.minutesAvailable == merged_df.minutesAvailable.max()].index, axis=0) #Extremer Außreiser. Wird aussortiert
+merged_df.loc[merged_df.milesRequested > 621, "milesRequested"] = 621 #Maximale Reichweite von Elektroautos beträgt 621 Meilen (siehe https://www.myevreview.com/de/vergleichstabelle/laengste-reichweite-wltp-km)
+merged_df.loc[merged_df.kWhRequested > 108.4, "kWhRequested"] = 108.4 #Akutelle Elektroautos können maximal 108.4 kWh laden. Alles darüber wird auf 108.4 gesetzt. (siehe https://einfacheauto.de/blog/e-auto-batteriekapazitaet#welche-zehn-e-autos-haben-den-groten-akku-verbaut)
+merged_df.loc[merged_df.kWhDelivered > 108.4, "kWhDelivered"] = 108.4 #Akutelle Elektroautos können maximal 108.4 kWh laden. Alles darüber wird auf 108.4 gesetzt.
+
 
 # Anzeigen der ersten Zeilen des gemergten DataFrames
 print(merged_df)
