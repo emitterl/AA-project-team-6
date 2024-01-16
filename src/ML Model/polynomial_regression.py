@@ -6,7 +6,9 @@ import pandas as pd
 from sklearn.preprocessing import PolynomialFeatures, StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import Ridge
-from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.model_selection import GridSearchCV
+from sklearn.pipeline import Pipeline
+from sklearn.metrics import mean_squared_error
 from model_preparation.import_model_data import model_df
 
 
@@ -29,30 +31,35 @@ model_df = pd.get_dummies(model_df, columns=['Weekday', 'weather_description'])
 X = model_df.drop('occupied_count', axis=1)  
 y = model_df['occupied_count']               
 
-# Aufteilung in Trainings- und Testdaten
+# Aufteilen in Trainings- und Testdaten
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
-# Erstellen polynomialer Features (Grad einstellen)
-poly_degree = 5 # Grad der polynomiale Erweiterung
-poly = PolynomialFeatures(degree=poly_degree)
-X_train_poly = poly.fit_transform(X_train)
-X_test_poly = poly.transform(X_test)
+# Definieren der Pipeline
+pipeline = Pipeline([
+    ('poly', PolynomialFeatures()),
+    ('scaling', StandardScaler()),
+    ('ridge', Ridge())
+])
 
-# Skalieren der polynomialen Features
-scaler = StandardScaler()
-X_train_poly_scaled = scaler.fit_transform(X_train_poly)
-X_test_poly_scaled = scaler.transform(X_test_poly)
+# Hyperparameter für die Grid-Suche
+param_grid = {
+    'poly__degree': [2, 3, 4],
+    'poly__interaction_only': [True, False],
+    'poly__include_bias': [True, False],
+    'ridge__alpha': [0.001, 0.01, 0.1, 1, 10, 100], 
+}
 
-# Erstellen und Trainieren des Ridge-Modells
-ridge_reg = Ridge(alpha=1)
-ridge_reg.fit(X_train_poly_scaled, y_train)
+# GridSearchCV auf den Trainingsdaten
+grid_search = GridSearchCV(pipeline, param_grid, cv=5, scoring='neg_mean_squared_error')
+grid_search.fit(X_train, y_train)
 
-# Vorhersagen auf den Testdaten
-y_pred = ridge_reg.predict(X_test_poly_scaled)
+# Beste Parameter und Modell
+best_params = grid_search.best_params_
+best_model = grid_search.best_estimator_
 
-# Bewertung des Modells
-mse = mean_squared_error(y_test, y_pred)
-r2 = r2_score(y_test, y_pred)
+# Bewertung auf den Testdaten
+y_pred = best_model.predict(X_test)
+test_mse = mean_squared_error(y_test, y_pred)
 
-print(f"Mean Squared Error: {mse}")
-print(f"R-squared: {r2}")
+print("Beste Parameter:", best_params)
+print("Test MSE:", test_mse)
