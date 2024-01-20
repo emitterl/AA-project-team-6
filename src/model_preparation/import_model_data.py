@@ -11,8 +11,6 @@ import_data['temperature'] = import_data['temperature'].astype(float)
 import_data['weather_description'] = import_data['weather_description'].astype(str)
 import_data['Weekday'] = import_data['Weekday'].astype(str)
 
-print(import_data['time'].dt.month.unique())
-print(import_data['time'].hasnans)
-# Überprüfen des importierten DataFrames
+
 model_df = import_data.copy()
 print(import_data.head())

@@ -5,8 +5,8 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_squared_error, r2_score
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import cross_val_score, KFold
+from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from model_preparation.import_model_data import model_df
 import pandas as pd
@@ -29,33 +29,18 @@ model_df.drop('siteID', axis=1, inplace=True)
 X = model_df.drop('occupied_count', axis=1)  # Merkmale
 y = model_df['occupied_count']               # Zielvariable
 
+pipeline = Pipeline([
+    ('scaling', StandardScaler()),
+    ('lin_reg', LinearRegression())
+])
 
-# Aufteilung in Trainings- und Testdaten
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+# Einstellen der Parameter für die Kreuzvalidierung
+kfold = KFold(n_splits=5, shuffle=True, random_state=42)
 
-print(X_train.head())
+# Durchführen der Kreuzvalidierung
+scores = cross_val_score(pipeline, X, y, cv=kfold, scoring='neg_mean_squared_error')
 
+# Berechnen des durchschnittlichen MSE
+average_mse = -scores.mean()
 
-# Initialisieren des StandardScaler
-scaler = StandardScaler()
-
-# Anpassen des Scalers nur auf die Trainingsdaten
-scaler.fit(X_train)
-
-# Skalieren der Trainings- und Testdaten
-X_train_scaled = scaler.transform(X_train)
-X_test_scaled = scaler.transform(X_test)
-
-# Erstellen und Trainieren des linearen Regressionsmodells
-lin_reg = LinearRegression()
-lin_reg.fit(X_train_scaled, y_train)
-
-# Vorhersagen auf den Testdaten
-y_pred = lin_reg.predict(X_test_scaled)
-
-# Bewertung des Modells
-mse = mean_squared_error(y_test, y_pred)
-r2 = r2_score(y_test, y_pred)
-
-print(f"Mean Squared Error: {mse}")
-print(f"R-squared: {r2}")
+print(f"Durchschnittlicher Mean Squared Error: {average_mse}")
