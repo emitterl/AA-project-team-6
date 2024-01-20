@@ -25,9 +25,6 @@ model_df['Weekday'] = model_df['Weekday'].map(weekday_map)
 # Umwandlung kategorialer Variablen in Dummy-Variablen
 model_df = pd.get_dummies(model_df, columns=['weather_description'])
 
-# model_df['siteIDIsOne'] = model_df['siteID'] == '1'
-# model_df.drop('siteID', axis=1, inplace=True)
-
 # Zielvariable und Merkmale trennen
 X = model_df.drop('occupied_count', axis=1)
 y = model_df['occupied_count']
