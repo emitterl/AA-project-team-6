@@ -61,17 +61,18 @@ model.predict(X_train_scaled[:10])
 history_df = pd.DataFrame(history.history)
 history_df
 
-root_metrics_df = history_df[["mse", "val_mse"]].apply(np.sqrt)
-root_metrics_df.rename({"mse":"rmse", "val_mse":"val_rmse"}, axis=1, inplace=True)
+root_metrics_df = history_df[["mse", "val_mse"]]
+#root_metrics_df = history_df[["mse", "val_mse"]].apply(np.sqrt)
+#root_metrics_df.rename({"mse":"rmse", "val_mse":"val_rmse"}, axis=1, inplace=True)
 root_metrics_df
 
 plt.Figure(figsize=(14,6), dpi=100)
 
-plt.plot(root_metrics_df["rmse"], label = 'Training error')
-plt.plot(root_metrics_df["val_rmse"], label = 'Validation error')
+plt.plot(root_metrics_df["mse"], label = 'Training error')
+plt.plot(root_metrics_df["val_mse"], label = 'Validation error')
 
 plt.xlabel("Epochs")
-plt.ylabel("Root Mean Squared Error")
+plt.ylabel("Mean Squared Error")
 
 # plt.xlim([0, epochs])
 plt.xticks(range(1,30))
@@ -84,5 +85,5 @@ X_test_scaled = st_scaler.transform(X_test)
 y_pred = model.predict(X_test_scaled)
 
 # Report regression performance on test set
-print("RMSE: ", np.sqrt(mean_squared_error(y_test, y_pred)))
+print("MSE: ", mean_squared_error(y_test, y_pred))
 print("MAE: ", mean_absolute_error(y_test, y_pred))
