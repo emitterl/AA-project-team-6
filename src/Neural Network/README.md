@@ -1,8 +1,9 @@
-Folgendes neuronales Netz wurde verwendet:
+**Folgendes neuronales Netz wurde verwendet:**
 
 Model: "sequential"
 _________________________________________________________________
  Layer (type)                Output Shape              Param #   
+ 
 =================================================================
  dense (Dense)               (None, 20)                500       
                                                                  
