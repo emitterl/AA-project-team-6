@@ -1,6 +1,5 @@
 Folgendes neuronales Netz wurde verwendet:
 
-
 Model: "sequential"
 _________________________________________________________________
  Layer (type)                Output Shape              Param #   
@@ -20,7 +19,7 @@ _________________________________________________________________
 
 Epochen: 30
 
-
 MAE:  2.4973567708077318
 
-Mögliche Verbesserungen: Nutzen eines RNN um die Zeitreihendaten besser zu berücksichtigen![image](https://github.com/emitterl/AA-project-team-6/assets/43874891/78e57464-0fcd-4546-ac31-75049d0949be)
+Mögliche Verbesserungen: 
+- Nutzen eines RNN um die Zeitreihendaten besser zu berücksichtigen.
