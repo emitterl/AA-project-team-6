@@ -113,7 +113,8 @@ merged_df.loc[merged_df.kWhRequested > 123, "kWhRequested"] = 123 # https://ev-d
 merged_df = merged_df.drop(merged_df[merged_df.kWhRequested == 0].index, axis=0) #--> 0 not possible --> Del
 merged_df = merged_df.drop(merged_df[merged_df.milesRequested == 0].index, axis=0) #--> 0 not possible --> Del
 merged_df.loc[merged_df.milesRequested > 425.6, "milesRequested"] = 425.6  #--> # https://ev-database.org --> max 425,6 miles
-merged_df = merged_df.drop(merged_df[merged_df.minutesAvailable == merged_df.minutesAvailable.max()].index, axis=0) # Outlier --> Del
+#merged_df = merged_df.drop(merged_df[merged_df.minutesAvailable == merged_df.minutesAvailable.max()].index, axis=0) # Outlier --> Del
+merged_df.drop(merged_df['minutesAvailable'].idxmax())
 
 
 
