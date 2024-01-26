@@ -40,8 +40,11 @@ st_scaler.fit(X_train)
 X_train_scaled = st_scaler.transform(X_train)
 
 model = Sequential(
-    [Dense(20, activation="relu", input_shape=[X_train.shape[1]]),
-    Dense(20, activation="relu"),
+    [Dense(25, activation="relu", input_shape=[X_train.shape[1]]),
+     Dropout(rate=0.1),
+    Dense(25, activation="relu"),
+     Dropout(rate=0.2),
+     Dense(25, activation="relu"),
      Dense(1)])
 
 # Compiling the ANN
