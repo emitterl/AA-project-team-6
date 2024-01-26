@@ -2,7 +2,7 @@
 
 
 1 Input Layer
-4 Hidden Layer
+5 Hidden Layer
 1 Output Layer
 
 --> Dropout Layer ro prevent overfitting
