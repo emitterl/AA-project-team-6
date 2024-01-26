@@ -106,15 +106,14 @@ merged_df = pd.merge(df, user_inputs_df_latest, how='left', left_on='id', right_
 merged_df.drop('reference_id', axis=1, inplace=True)
 
 # Entfernen von Ausreißern
-merged_df.loc[merged_df.kWhDelivered > 123, "kWhDelivered"] = 123 # https://ev-database.org --> max 123 kwh
+#merged_df.loc[merged_df.kWhDelivered > 123, "kWhDelivered"] = 123 # https://ev-database.org --> max 123 kwh
 merged_df.loc[merged_df.WhPerMile > 474.8, "WhPerMile"] = 474.8 # https://ev-database.org --> max 474.8 wh/mile
 merged_df.loc[merged_df.WhPerMile < 223.7, "WhPerMile"] = 223.7 # https://ev-database.org --> min 223.7 wh/mile
 merged_df.loc[merged_df.kWhRequested > 123, "kWhRequested"] = 123 # https://ev-database.org --> max 123 kwh
 merged_df = merged_df.drop(merged_df[merged_df.kWhRequested == 0].index, axis=0) #--> 0 not possible --> Del
 merged_df = merged_df.drop(merged_df[merged_df.milesRequested == 0].index, axis=0) #--> 0 not possible --> Del
 merged_df.loc[merged_df.milesRequested > 425.6, "milesRequested"] = 425.6  #--> # https://ev-database.org --> max 425,6 miles
-#merged_df = merged_df.drop(merged_df[merged_df.minutesAvailable == merged_df.minutesAvailable.max()].index, axis=0) # Outlier --> Del
-merged_df.drop(merged_df['minutesAvailable'].idxmax())
+merged_df = merged_df.drop(merged_df[merged_df.minutesAvailable == merged_df.minutesAvailable.max()].index, axis=0) # Outlier --> Del
 
 
 
