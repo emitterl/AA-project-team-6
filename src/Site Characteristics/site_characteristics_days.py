@@ -1,14 +1,10 @@
 import sys
 import os
 
-
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from data_preparation import merged_df
 import matplotlib.pyplot as plt
-
-from datetime import datetime, timedelta
-
 
 
 # Filtern der Daten für jede Site
