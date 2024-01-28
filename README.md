@@ -1,5 +1,5 @@
 # AA Project 2023/24
-Team:
+Team 6:
 - Jasper Fülle (7419157)
 - Nico Guldin (7424632)
 - Emma Lux (7419032)
