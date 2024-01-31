@@ -83,7 +83,7 @@ user_inputs_df['minutesAvailable'] = user_inputs_df['minutesAvailable'].astype(f
 user_inputs_df['modifiedAt'] = pd.to_datetime(user_inputs_df['modifiedAt'], utc=True).apply(convert_timezone)
 user_inputs_df['requestedDeparture'] = pd.to_datetime(user_inputs_df['requestedDeparture'], utc=True).apply(convert_timezone)
 
-# Handle missing values (in progress)
+# Handle missing values
 dfNan = df[df.isna().any(axis=1)]
 
 # Erste Zeilen der importierten Daten anzeigen von charging_sessions und user_inputs
