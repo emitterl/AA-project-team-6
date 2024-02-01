@@ -46,4 +46,6 @@ print(model_df.head())
 # Konvertieren der 'time'-Spalte in UTC vor dem Exportieren
 model_df['time'] = model_df['time'].dt.tz_convert('UTC')
 
+
+# Die Daten in csv exportieren, damit die Daten nicht jedes mal neu berechnet werden müssen
 model_df.to_csv('model_data.csv', index=False)
