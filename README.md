@@ -8,20 +8,17 @@ Team 6:
 
 ## General notes
 
-All relevant files for the execution are stored in the directory ./src.  
-The code is stored in Python files and named after the task description.  
+All relevant files for the execution are stored in the directory **./src**.  
+The code is stored in Jupyter Notebook files and named after the task description.  
 Created plots are stored in the respective directiory under ../plots.  
 
 ## Order of execution
-1. Data Collection and Preparation: **data_preparation.py**
+1. Data Collection and Preparation: **data_preparation.ipynb**
 2. Descriptive Analytics
-   1. Temporal Patterns and Seasonality: **Temporal Patterns and Seasonality/02_temporal_patterns.py**
-   2. Key Perfomance Indicators: **KPIs/03_KPIs.py**
-   3. Site Characteristics
-      1. ...
-3. Cluster Analysis: **Cluster Analysis/08_cluster_analysis.py**
+   1. Temporal Patterns and Seasonality: **Temporal Patterns and Seasonality/temporal_patterns.ipynb**
+   2. Key Perfomance Indicators: **KPIs/KPIs.ipynb**
+   3. Site Characteristics: **Site Characteristics/site_characteristics.ipynb**
+3. Cluster Analysis: **Cluster Analysis/cluster_analysis.ipynb**
 4. Utilization Prediction
-   1. Neural Network Model
-      1. ...
-   3. ML Model
-      1. ...
+   1. Neural Network Model: **Neural Network/nn.ipynb**
+   2. ML Model: **ML Model/ML_models.ipynb**
