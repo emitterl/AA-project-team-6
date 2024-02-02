@@ -10,7 +10,8 @@ Team 6:
 
 All relevant files for the execution are stored in the directory **./src**.  
 The code is stored in Jupyter Notebook files and named after the task description.  
-Created plots are stored in the respective directiory under ../plots.  
+Created plots are stored in the respective directiory under ../plots.   
+For easy execution we created a Conda environment (./environment.yml) including all necessary dependencies and packages.
 
 ## Order of execution
 1. Data Collection and Preparation: **data_preparation.ipynb**
