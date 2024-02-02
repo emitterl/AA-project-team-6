@@ -1,17 +1,22 @@
-name: AA-Project
+name: AA-project
 channels:
+  - conda-forge
   - defaults
 dependencies:
+  - python=3.11
   - numpy
+  - pip
+  - jupyter
+  - jupyterlab
   - pandas
   - matplotlib
-  - scikit-learn
+  - scikit-learn=1.4.0
   - seaborn
   - scipy
-  - requests_cache
   - ipykernel
   - nbformat
   - pickleshare
   - pip:
       - openmeteo_requests
       - retry_requests
+      - requests_cache
